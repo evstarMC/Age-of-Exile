@@ -13,8 +13,7 @@ import com.robertx22.age_of_exile.uncommon.interfaces.data_items.ICommonDataItem
 import com.robertx22.age_of_exile.uncommon.interfaces.data_items.ISalvagable;
 import com.robertx22.age_of_exile.uncommon.utilityclasses.LevelUtils;
 import com.robertx22.age_of_exile.uncommon.utilityclasses.PlayerUtils;
-import com.robertx22.age_of_exile.vanilla_mc.blocks.IAutomatable;
-import com.robertx22.age_of_exile.vanilla_mc.blocks.bases.BaseModificationStation;
+import com.robertx22.age_of_exile.vanilla_mc.blocks.bases.BaseSkillStation;
 import com.robertx22.library_of_exile.packets.particles.ParticleEnum;
 import com.robertx22.library_of_exile.packets.particles.ParticlePacketData;
 import com.robertx22.library_of_exile.tile_bases.NonFullBlock;
@@ -44,16 +43,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class TileGearSalvage extends BaseModificationStation implements IAutomatable {
+public class TileGearSalvage extends BaseSkillStation {
 
-    public static List<Integer> INPUT_SLOTS = Arrays.asList(0, 1, 2, 3, 4);
-    public static List<Integer> OUTPUT_SLOTS =
-        Arrays.asList(
-            5, 6, 7, 8, 9, 10, 11, 12, 13, 14 /**/,
-            15, 16, 17, 18, 19, 20, 21, 22, 23,/**/
-            24, 25, 26, 27, 28, 29, 30, 31);
+    public static List<Integer> INPUT_SLOTS = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8);
+    public static List<Integer> OUTPUT_SLOTS = Arrays.asList(9, 10, 11, 12, 13, 14, 15, 16, 17);
+    public static List<Integer> FUEL_SLOTS = Arrays.asList(18);
 
-    public static int TOTAL_SLOTS_COUNT = INPUT_SLOTS.size() + OUTPUT_SLOTS.size();
+    public static int TOTAL_SLOTS_COUNT = INPUT_SLOTS.size() + FUEL_SLOTS.size() + OUTPUT_SLOTS.size();
 
     @Override
     public List<Integer> getInputSlots() {
@@ -67,7 +63,7 @@ public class TileGearSalvage extends BaseModificationStation implements IAutomat
 
     @Override
     public List<Integer> getFuelSlots() {
-        return Arrays.asList();
+        return FUEL_SLOTS;
     }
 
     public static List<ItemStack> getSmeltingResultForItem(ItemStack st) {
@@ -93,10 +89,8 @@ public class TileGearSalvage extends BaseModificationStation implements IAutomat
 
     }
 
-    private static final short COOK_TIME_FOR_COMPLETION = 200; // vanilla value is 200 = 10 seconds
-
     public TileGearSalvage() {
-        super(ModRegistry.BLOCK_ENTITIES.GEAR_SALVAGE, TOTAL_SLOTS_COUNT);
+        super(null, PlayerSkillEnum.SALVAGING, ModRegistry.BLOCK_ENTITIES.GEAR_SALVAGE, TOTAL_SLOTS_COUNT);
 
     }
 
@@ -249,10 +243,41 @@ public class TileGearSalvage extends BaseModificationStation implements IAutomat
     @Override
     public boolean modifyItem(int number, PlayerEntity player) {
 
-        boolean sal = false;
+        return true;
+    }
 
-        for (int i = 0; i < INPUT_SLOTS.size(); i++) {
+    @Override
+    public void onSmeltTick() {
+
+        reduceFuel();
+
+        PlayerEntity player = getOwner();
+
+        if (player != null) {
+
+            if (!hasFuel()) {
+                burnFuelIfNeeded();
+                cook_ticks--;
+                return;
+            }
+
+            if (getCookProgress() < 1) {
+                List<ItemStack> stacks = new ArrayList<>();
+                for (int inputSlot : INPUT_SLOTS) {
+                    stacks.add(itemStacks[inputSlot]);
+                }
+                if (stacks.stream()
+                    .anyMatch(x -> !x.isEmpty())) {
+                    cook_ticks++;
+                }
+                return;
+            }
+
+            boolean sal = false;
+
             if (this.salvage()) {
+
+                cook_ticks = 0;
 
                 sal = true;
 
@@ -273,26 +298,30 @@ public class TileGearSalvage extends BaseModificationStation implements IAutomat
                 effect.extraDrops.forEach(x -> PlayerUtils.giveItem(x, player));
 
             }
+
+            if (sal) {
+
+                SoundUtils.playSound(world, pos, SoundEvents.BLOCK_ANVIL_USE, 0.3F, 1);
+
+                ParticleEnum.sendToClients(
+                    pos.up(), world, new ParticlePacketData(pos.up(), ParticleEnum.AOE).radius(0.5F)
+                        .type(ParticleTypes.DUST)
+                        .amount(15));
+
+                ParticleEnum.sendToClients(
+                    pos.up(), world, new ParticlePacketData(pos.up(), ParticleEnum.AOE).radius(0.5F)
+                        .type(ParticleTypes.FLAME)
+                        .motion(new Vec3d(0, 0, 0))
+                        .amount(15));
+
+            }
+
         }
 
-        if (sal) {
-
-            SoundUtils.playSound(world, pos, SoundEvents.BLOCK_ANVIL_USE, 0.3F, 1);
-
-            ParticleEnum.sendToClients(
-                pos.up(), world, new ParticlePacketData(pos.up(), ParticleEnum.AOE).radius(0.5F)
-                    .type(ParticleTypes.DUST)
-                    .amount(15));
-
-            ParticleEnum.sendToClients(
-                pos.up(), world, new ParticlePacketData(pos.up(), ParticleEnum.AOE).radius(0.5F)
-                    .type(ParticleTypes.FLAME)
-                    .motion(new Vec3d(0, 0, 0))
-                    .amount(15));
-
+        if (cook_ticks < 0) {
+            cook_ticks = 0;
         }
 
-        return true;
     }
 
 }
