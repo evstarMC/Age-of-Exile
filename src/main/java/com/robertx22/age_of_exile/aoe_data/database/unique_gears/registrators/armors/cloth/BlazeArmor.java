@@ -5,14 +5,12 @@ import com.robertx22.age_of_exile.aoe_data.database.sets.GearSetsAdder;
 import com.robertx22.age_of_exile.aoe_data.database.unique_gears.UniqueGearBuilder;
 import com.robertx22.age_of_exile.database.data.StatModifier;
 import com.robertx22.age_of_exile.database.data.stats.types.core_stats.*;
-import com.robertx22.age_of_exile.database.data.stats.types.defense.Armor;
 import com.robertx22.age_of_exile.database.data.stats.types.generated.ElementalDamageBonus;
 import com.robertx22.age_of_exile.database.data.stats.types.generated.ElementalResist;
 import com.robertx22.age_of_exile.database.data.stats.types.generated.ElementalSpellDamage;
 import com.robertx22.age_of_exile.database.data.stats.types.offense.Accuracy;
 import com.robertx22.age_of_exile.database.data.stats.types.offense.DamageOverTime;
 import com.robertx22.age_of_exile.database.data.stats.types.offense.crit.SpellCriticalHit;
-import com.robertx22.age_of_exile.database.data.stats.types.resources.health.Health;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.mana.Mana;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.mana.ManaRegen;
 import com.robertx22.age_of_exile.database.registry.ISlashRegistryInit;
@@ -30,6 +28,8 @@ public class BlazeArmor implements ISlashRegistryInit {
     @Override
     public void registerAll() {
 
+        // DARK/FIRE cloth set
+
         UniqueGearBuilder.ofSet(
             ModRegistry.UNIQUE_GEARS.BLAZE_SET,
             ArmorSet.SlotEnum.HELMET,
@@ -37,8 +37,8 @@ public class BlazeArmor implements ISlashRegistryInit {
             BaseClothArmors.HELMETS.values())
             .baseStats(
                 Arrays.asList(
-                    new StatModifier(3, 3, Health.getInstance(), ModType.FLAT),
-                    new StatModifier(2, 8, Armor.getInstance(), ModType.FLAT),
+                    getStat(ArmorStat.HEALTH, ArmorType.LIGHT, ArmorSlot.HELMET),
+                    getStat(ArmorStat.ARMOR, ArmorType.LIGHT, ArmorSlot.HELMET),
                     new StatModifier(-10, -10, new ElementalResist(Elements.Light)),
                     new StatModifier(20, 30, new ElementalResist(Elements.Dark))
                 )
@@ -67,8 +67,8 @@ public class BlazeArmor implements ISlashRegistryInit {
             BaseClothArmors.CHESTS.values())
             .baseStats(
                 Arrays.asList(
-                    new StatModifier(5, 5, Health.getInstance(), ModType.FLAT),
-                    new StatModifier(5, 15, Armor.getInstance(), ModType.FLAT),
+                    getStat(ArmorStat.HEALTH, ArmorType.LIGHT, ArmorSlot.CHEST),
+                    getStat(ArmorStat.ARMOR, ArmorType.LIGHT, ArmorSlot.CHEST),
                     new StatModifier(-10, -10, new ElementalResist(Elements.Water)),
                     new StatModifier(20, 30, new ElementalResist(Elements.Fire))
                 )
@@ -97,8 +97,8 @@ public class BlazeArmor implements ISlashRegistryInit {
             BaseClothArmors.PANTS.values())
             .baseStats(
                 Arrays.asList(
-                    new StatModifier(5, 5, Health.getInstance(), ModType.FLAT),
-                    new StatModifier(5, 12, Armor.getInstance(), ModType.FLAT),
+                    getStat(ArmorStat.HEALTH, ArmorType.LIGHT, ArmorSlot.PANTS),
+                    getStat(ArmorStat.ARMOR, ArmorType.LIGHT, ArmorSlot.PANTS),
                     new StatModifier(-10, -10, new ElementalResist(Elements.Light)),
                     new StatModifier(20, 30, new ElementalResist(Elements.Fire))
                 )
@@ -128,8 +128,8 @@ public class BlazeArmor implements ISlashRegistryInit {
             BaseClothArmors.BOOTS.values())
             .baseStats(
                 Arrays.asList(
-                    new StatModifier(4, 4, Health.getInstance(), ModType.FLAT),
-                    new StatModifier(3, 8, Armor.getInstance(), ModType.FLAT),
+                    getStat(ArmorStat.HEALTH, ArmorType.LIGHT, ArmorSlot.BOOTS),
+                    getStat(ArmorStat.ARMOR, ArmorType.LIGHT, ArmorSlot.BOOTS),
                     new StatModifier(-10, -10, new ElementalResist(Elements.Water)),
                     new StatModifier(20, 30, new ElementalResist(Elements.Dark))
                 )

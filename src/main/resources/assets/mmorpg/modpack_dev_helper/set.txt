@@ -3,4 +3,6 @@ This registry is modify-able through datapacks.
 oak_set
 slime_set
 blaze_set
+dark_crystal_set
+void_set
 bone_set

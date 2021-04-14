@@ -14,6 +14,8 @@ public class UniqueGearItemRegister extends BaseItemRegistrator {
     public ArmorSet BONE_SET = new ArmorSet("bone", LevelRanges.HIGH, ArmorType.LEATHER);
     public ArmorSet BLAZE_SET = new ArmorSet("blaze", LevelRanges.HIGH, ArmorType.CLOTH);
     public ArmorSet SLIME_SET = new ArmorSet("slime", LevelRanges.HIGH, ArmorType.CLOTH);
+    public ArmorSet DARK_CRYSTAL_SET = new ArmorSet("dark_crystal", LevelRanges.HIGH, ArmorType.PLATE);
+    public ArmorSet VOID_SET = new ArmorSet("void", LevelRanges.HIGH, ArmorType.CLOTH);
 
     public Item BEAST_BLOOD = item(new BaseArmorItem(ArmorTier.from(LevelRanges.ENDGAME), ArmorType.PLATE, "Plate Chest", EquipmentSlot.CHEST, true), "uniques/armor/beast_blood");
     public Item EXEC_PRIDE = item(new BaseArmorItem(ArmorTier.from(LevelRanges.ENDGAME), ArmorType.LEATHER, "Leather Chest", EquipmentSlot.CHEST, true), "uniques/armor/exec_pride");
@@ -37,6 +39,7 @@ public class UniqueGearItemRegister extends BaseItemRegistrator {
 
     public Item GREED_PERSIST_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/greed_persist");
     public Item WITCH_BREW_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/witch_brew");
+    public Item GOLD_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/gold_ring");
     public Item LOOP_OF_INFINITY_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/loop_of_infinity");
     public Item LUNAR_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/lunar_ring");
     public Item SOLAR_RING = item(new BaseUniqueRing("Ring"), "uniques/jewelry/solar_ring");
@@ -55,6 +58,8 @@ public class UniqueGearItemRegister extends BaseItemRegistrator {
 
     public Item OBSI_MIGHT_AXE = item(new BaseUniqueAxe("Axe"), "uniques/weapon/obsi_might");
     public Item JUDGEMENT_AXE = item(new BaseUniqueAxe("Axe"), "uniques/weapon/judgement");
+
+    public Item VOID_SWORD = item(new BaseUniqueSword("Sword"), "uniques/weapon/void_sword");
 
     public Item BONECHILL_RING_MI = item(new BaseUniqueRing("Ring"), "uniques/jewelry/bonechill_ring");
     public Item BONECHILL_AMULET_MI = item(new BaseUniqueRing("Amulet"), "uniques/jewelry/bonechill_amulet");

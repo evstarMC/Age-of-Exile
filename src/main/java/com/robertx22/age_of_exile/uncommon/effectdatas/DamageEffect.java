@@ -121,6 +121,7 @@ public class DamageEffect extends EffectData implements IArmorReducable, IPenetr
     public boolean accuracyCritRollFailed = false;
     public float damageMultiplier = 1;
     public float attackerAccuracy = 0;
+    public boolean ignoresResists = false;
 
     public float manaBurn = 0;
 
@@ -509,7 +510,7 @@ public class DamageEffect extends EffectData implements IArmorReducable, IPenetr
             if (entry.getValue() > 0) {
                 DamageEffect bonus = new DamageEffect(
                     attackInfo, source, target, entry.getValue(),
-                    AttackType.OTHER, this.weaponType, style);
+                    AttackType.BASIC_ELE_ATK_DMG, this.weaponType, style);
                 bonus.element = entry.getKey();
                 bonus.damageMultiplier = this.damageMultiplier;
                 bonus.calculateEffects();

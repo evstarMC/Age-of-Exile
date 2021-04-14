@@ -66,6 +66,10 @@ public class UniqueGearBuilder {
 
     }
 
+    public static UniqueGearBuilder of(Item item, String id, String locname, Collection<DataGenKey<BaseGearType>> gearType) {
+        return of(item, id, locname, "", gearType);
+    }
+
     public static UniqueGearBuilder of(Item item, String id, String locname, String desc, DataGenKey<BaseGearType>... gearType) {
         return of(item, id, locname, desc, Arrays.asList(gearType));
     }
@@ -100,6 +104,11 @@ public class UniqueGearBuilder {
 
     public UniqueGearBuilder baseStats(StatModifier... stat) {
         this.uniq.base_stats.addAll(Arrays.asList(stat));
+        return this;
+    }
+
+    public UniqueGearBuilder setReplacesName() {
+        this.uniq.replaces_name = true;
         return this;
     }
 

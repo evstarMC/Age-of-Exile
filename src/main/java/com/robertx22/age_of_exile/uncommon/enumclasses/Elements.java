@@ -9,12 +9,12 @@ public enum Elements {
 
     Physical(false, "Physical", Formatting.GOLD, "physical", "\u2726"),
     Fire(true, "Fire", Formatting.RED, "fire", "\u2600"),
-    Water(true, "Cold", Formatting.AQUA, "water", "\u2749"),
-    Nature(true, "Poison", Formatting.DARK_GREEN, "nature", "\u273F"),
+    Water(true, "Water", Formatting.AQUA, "water", "\u2749"),
+    Nature(true, "Earth", Formatting.DARK_GREEN, "nature", "\u273F"),
     //Thunder(true, "Thunder", Formatting.YELLOW, "thunder", "\u272A"),
 
     Light(true, "Light", Formatting.WHITE, "light", "\u2600"),
-    Dark(true, "Dark", Formatting.DARK_PURPLE, "dark", "\u273F"),
+    Dark(true, "Dark", Formatting.DARK_PURPLE, "dark", "\u2743"),
 
     Elemental(false, "Elemental", Formatting.LIGHT_PURPLE, "elemental", "\u269C"),
     All(false, "All", Formatting.LIGHT_PURPLE, "all", "\u273F");

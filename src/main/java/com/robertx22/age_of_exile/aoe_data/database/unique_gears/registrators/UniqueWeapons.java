@@ -4,6 +4,7 @@ import com.robertx22.age_of_exile.aoe_data.database.DataHelper;
 import com.robertx22.age_of_exile.aoe_data.database.base_gear_types.adders.BaseGearWeapons;
 import com.robertx22.age_of_exile.aoe_data.database.stats.DatapackStatAdder;
 import com.robertx22.age_of_exile.aoe_data.database.unique_gears.UniqueGearBuilder;
+import com.robertx22.age_of_exile.aoe_data.database.unique_gears.registrators.weapons.UniqueSwords;
 import com.robertx22.age_of_exile.database.data.StatModifier;
 import com.robertx22.age_of_exile.database.data.stats.types.bonus_dmg_to_status_affected.BonusDmgToStatusAffected;
 import com.robertx22.age_of_exile.database.data.stats.types.core_stats.Strength;
@@ -18,6 +19,7 @@ import com.robertx22.age_of_exile.database.data.stats.types.resources.HealPower;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.PlusResourceOnKill;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.ResourceOnHit;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.mana.ManaBurn;
+import com.robertx22.age_of_exile.database.data.stats.types.special.SpecialStats;
 import com.robertx22.age_of_exile.database.data.stats.types.spell_calc.CooldownReduction;
 import com.robertx22.age_of_exile.database.data.stats.types.spell_calc.ManaCost;
 import com.robertx22.age_of_exile.database.data.stats.types.spell_calc.ProjectileSpeed;
@@ -38,6 +40,8 @@ public class UniqueWeapons implements ISlashRegistryInit {
     @Override
     public void registerAll() {
 
+        new UniqueSwords().registerAll();
+
         UniqueGearBuilder.of(
             ModRegistry.UNIQUE_GEARS.JUDGEMENT_AXE,
             "judgement",
@@ -45,8 +49,8 @@ public class UniqueWeapons implements ISlashRegistryInit {
             "Are you worthy, mortal?",
             BaseGearWeapons.AXE.get(LevelRanges.HIGH))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.HALF, Elements.Light),
-                DataHelper.getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.HALF, Elements.Fire)
+                getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.HALF, Elements.Light),
+                getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.HALF, Elements.Fire)
             ))
             .stats(Arrays.asList(
                 new StatModifier(-30, 30, HealPower.getInstance(), ModType.FLAT),
@@ -60,10 +64,10 @@ public class UniqueWeapons implements ISlashRegistryInit {
             ModRegistry.UNIQUE_GEARS.OBSI_MIGHT_AXE,
             "obsi_might",
             "Obsidian's Might",
-            "This thirst for blood only seems lower than it's desire to taste burning flesh.",
+            "",
             BaseGearWeapons.AXE.get(LevelRanges.ENDGAME))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.FULL, Elements.Fire))
+                getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.FULL, Elements.Fire))
             )
             .stats(Arrays.asList(
                 new StatModifier(15, 50, CriticalHit.getInstance(), ModType.LOCAL_INCREASE),
@@ -78,10 +82,10 @@ public class UniqueWeapons implements ISlashRegistryInit {
             ModRegistry.UNIQUE_GEARS.INCA_THUNDER_SWORD,
             "inca_thunder",
             "Incarnation of Thunder",
-            "The ability to wield thunder is said to come once in a millennium.",
+            "",
             BaseGearWeapons.SWORD.get(LevelRanges.ENDGAME))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Light)))
+                getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Light)))
             .stats(Arrays.asList(
                 new StatModifier(5, 15, ChanceToApplyEffect.BURN, ModType.FLAT),
                 new StatModifier(-20, 20, CriticalDamage.getInstance(), ModType.FLAT)
@@ -94,12 +98,13 @@ public class UniqueWeapons implements ISlashRegistryInit {
             ModRegistry.UNIQUE_GEARS.WATER_ELE_SWORD,
             "water_ele_sword",
             "Water Elemental",
-            "Essence lies in water.",
+            "",
             BaseGearWeapons.SWORD.get(LevelRanges.HIGH))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Water)))
+                getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Water)))
             .stats(Arrays.asList(
                 new StatModifier(15, 30, new AttackDamage(Elements.Water), ModType.LOCAL_INCREASE),
+                new StatModifier(5, 10, SpecialStats.CRIT_WATER_DMG_MANA, ModType.FLAT),
                 new StatModifier(15, 30, BonusDmgToStatusAffected.FROST, ModType.FLAT)
             ))
             .req(new StatRequirement().setInt(0.5F)
@@ -131,7 +136,7 @@ public class UniqueWeapons implements ISlashRegistryInit {
             BaseGearWeapons.SCEPTER.get(LevelRanges.ENDGAME))
 
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Light)))
+                getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Light)))
             .stats(Arrays.asList(
                 new StatModifier(5, 25, HealPower.getInstance(), ModType.FLAT),
                 new StatModifier(-100, -100, CriticalHit.getInstance(), ModType.FLAT),
@@ -148,7 +153,7 @@ public class UniqueWeapons implements ISlashRegistryInit {
             "Everything must be exactly as required.",
             BaseGearWeapons.SCEPTER.get(LevelRanges.HIGH))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Nature)))
+                getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Nature)))
             .stats(Arrays.asList(
                 new StatModifier(10, 30, HealPower.getInstance(), ModType.FLAT),
                 new StatModifier(2, 10, new ElementalPenetration(Elements.Nature), ModType.FLAT),
@@ -193,7 +198,7 @@ public class UniqueWeapons implements ISlashRegistryInit {
             "Found in a deep pit of ice. Many wands were shattered in attempts to imbue it.",
             BaseGearWeapons.WAND.get(LevelRanges.ENDGAME))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Water)))
+                getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Water)))
             .stats(Arrays.asList(
                 new StatModifier(10, 20, ProjectileSpeed.getInstance(), ModType.FLAT),
                 new StatModifier(5, 10, ChanceToApplyEffect.FROSTBURN, ModType.FLAT),
@@ -211,7 +216,7 @@ public class UniqueWeapons implements ISlashRegistryInit {
             "The ability to carry any burden is a heavy one.",
             BaseGearWeapons.WAND.get(LevelRanges.ENDGAME))
             .baseStats(Arrays.asList(
-                DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Nature)))
+                getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Nature)))
             .stats(Arrays.asList(
                 new StatModifier(15, 30, new ElementalSpellDamage(Elements.Nature), ModType.FLAT),
                 new StatModifier(-100, -100, CriticalHit.getInstance(), ModType.FLAT),
