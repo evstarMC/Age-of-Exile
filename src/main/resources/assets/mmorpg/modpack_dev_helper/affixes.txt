@@ -1,6 +1,7 @@
 These are all default registry entries of this type.
 This registry is modify-able through datapacks.
 of_exp
+farming_exp
 nature_wep_dmg_jewelry
 scaled
 jewel_accuracy_suffix
@@ -10,17 +11,23 @@ double_drop_chance_pre
 seraphim
 thunder_wep_dmg
 of_consumption
+light_ele_dmg_jewelry
 socket_suff
 water_ele_dmg_jewelry
 true_hit
+light_res
 night_yield
 fire_wep_dmg
 of_spell_dmg
+fishing_exp
+dark_res
 azure
 of_fast_cast
 hot_biome_yield
+dark_ele_dmg_jewelry
 cruel
 fawns
+light_wep_dmg_jewelry
 reinforced
 thunder_wep_dmg_jewelry
 valkyrie
@@ -31,6 +38,8 @@ of_affluence
 water_res
 protective
 agile
+mining_exp
+light_wep_dmg
 mana_thief
 of_the_titan
 rain_yield
@@ -49,6 +58,7 @@ triple_drop_chance_pre
 of_the_troll
 scavanger
 of_the_sky
+dark_wep_dmg_jewelry
 of_the_agile
 of_speed
 of_vampirism
@@ -57,12 +67,14 @@ water_wep_dmg
 double_drop_chance_suf
 cold_biome_yield
 of_less_cd
+tyrannical
 vampiric
 thunder_ele_dmg_jewelry
 of_spirit_markings
 of_the_philosopher
 fire_wep_dmg_jewelry
 of_precision
+dark_wep_dmg
 triple_drop_chance_suf
 of_gluttony
 nature_wep_dmg

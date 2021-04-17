@@ -37,7 +37,7 @@ public class BaseGearWeapons implements ISlashRegistryInit {
             .weaponType(WeaponTypes.Bow)
             .req(new StatRequirement().setDex(0.5f))
             .tags(new TagList(SlotTag.ranger_casting_weapon, SlotTag.bow, SlotTag.weapon_family, SlotTag.ranged_weapon, SlotTag.dexterity))
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.Bow, DataHelper.Number.FULL, Elements.Physical))
+            .baseStat(getAttackDamageStat(WeaponTypes.Bow, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.RANGED)
             .addHunterLevelRanges()
             .build();
@@ -45,8 +45,8 @@ public class BaseGearWeapons implements ISlashRegistryInit {
         CROSSBOW = BaseGearBuilder.of(GearSlots.CROSBOW, "crossbow", "Crossbow", ModRegistry.GEAR_ITEMS.CROSSBOWS)
             .weaponType(WeaponTypes.CrossBow)
             .req(new StatRequirement().setDex(0.5f))
-            .tags(new TagList(SlotTag.crossbow, SlotTag.weapon_family, SlotTag.ranged_weapon, SlotTag.dexterity))
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.CrossBow, DataHelper.Number.FULL, Elements.Physical))
+            .tags(new TagList(SlotTag.ranger_casting_weapon, SlotTag.crossbow, SlotTag.weapon_family, SlotTag.ranged_weapon, SlotTag.dexterity))
+            .baseStat(getAttackDamageStat(WeaponTypes.CrossBow, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.RANGED)
             .addHunterLevelRanges()
             .build();
@@ -56,21 +56,20 @@ public class BaseGearWeapons implements ISlashRegistryInit {
             .weaponType(WeaponTypes.Axe)
             .req(new StatRequirement().setStr(0.5f))
             .tags(new TagList(SlotTag.warrior_casting_weapon, SlotTag.axe, SlotTag.weapon_family, SlotTag.melee_weapon, SlotTag.strength))
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.FULL, Elements.Physical))
+            .baseStat(getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.MELEE)
             .addWarriorLevelRanges()
-
             .build();
 
         SWORD = BaseGearBuilder.of(GearSlots.SWORD, "sword", "Sword", ModRegistry.GEAR_ITEMS.SWORDS)
             .attackSpeed(BaseGearType.Constants.SWORD_ATK_SPEED)
             .weaponType(WeaponTypes.Sword)
-            .req(new StatRequirement().setStr(0.3F)
-                .setDex(0.1F))
+            .req(new StatRequirement()
+                    .setStr(0.3F)
+                    .setDex(0.1F)
+            )
             .tags(new TagList(SlotTag.warrior_casting_weapon, SlotTag.sword, SlotTag.melee_weapon, SlotTag.weapon_family, SlotTag.strength, SlotTag.dexterity))
-
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Physical))
-
+            .baseStat(getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.MELEE)
             .addWarriorLevelRanges()
             .build();
@@ -80,7 +79,7 @@ public class BaseGearWeapons implements ISlashRegistryInit {
             .weaponType(WeaponTypes.Wand)
             .req(new StatRequirement().setInt(0.5F))
             .tags(new TagList(SlotTag.mage_weapon, SlotTag.wand, SlotTag.weapon_family, SlotTag.melee_weapon, SlotTag.intelligence))
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Physical))
+            .baseStat(getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Physical))
             .implicitStat(new StatModifier(3, 10, SpellDamage.getInstance(), ModType.FLAT))
             .attackStyle(AttackPlayStyle.MAGIC)
             .addMageWeaponLevelRanges()
@@ -93,7 +92,7 @@ public class BaseGearWeapons implements ISlashRegistryInit {
             .weaponType(WeaponTypes.Wand)
             .req(new StatRequirement().setInt(0.5F))
             .tags(new TagList(SlotTag.mage_weapon, SlotTag.wand, SlotTag.weapon_family, SlotTag.melee_weapon, SlotTag.intelligence))
-            .baseStat(DataHelper.getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Physical))
+            .baseStat(getAttackDamageStat(WeaponTypes.Wand, DataHelper.Number.FULL, Elements.Physical))
             .implicitStat(new StatModifier(3, 10, HealPower.getInstance(), ModType.FLAT))
             .attackStyle(AttackPlayStyle.MELEE)
             .addMageWeaponLevelRanges()
