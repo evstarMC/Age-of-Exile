@@ -45,7 +45,7 @@ public class BaseGearWeapons implements ISlashRegistryInit {
         CROSSBOW = BaseGearBuilder.of(GearSlots.CROSBOW, "crossbow", "Crossbow", ModRegistry.GEAR_ITEMS.CROSSBOWS)
             .weaponType(WeaponTypes.CrossBow)
             .req(new StatRequirement().setDex(0.5f))
-            .tags(new TagList(SlotTag.crossbow, SlotTag.weapon_family, SlotTag.ranged_weapon, SlotTag.dexterity))
+            .tags(new TagList(SlotTag.ranger_casting_weapon, SlotTag.crossbow, SlotTag.weapon_family, SlotTag.ranged_weapon, SlotTag.dexterity))
             .baseStat(getAttackDamageStat(WeaponTypes.CrossBow, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.RANGED)
             .addHunterLevelRanges()
@@ -59,18 +59,17 @@ public class BaseGearWeapons implements ISlashRegistryInit {
             .baseStat(getAttackDamageStat(WeaponTypes.Axe, DataHelper.Number.FULL, Elements.Physical))
             .attackStyle(AttackPlayStyle.MELEE)
             .addWarriorLevelRanges()
-
             .build();
 
         SWORD = BaseGearBuilder.of(GearSlots.SWORD, "sword", "Sword", ModRegistry.GEAR_ITEMS.SWORDS)
             .attackSpeed(BaseGearType.Constants.SWORD_ATK_SPEED)
             .weaponType(WeaponTypes.Sword)
-            .req(new StatRequirement().setStr(0.3F)
-                .setDex(0.1F))
+            .req(new StatRequirement()
+                    .setStr(0.3F)
+                    .setDex(0.1F)
+            )
             .tags(new TagList(SlotTag.warrior_casting_weapon, SlotTag.sword, SlotTag.melee_weapon, SlotTag.weapon_family, SlotTag.strength, SlotTag.dexterity))
-
             .baseStat(getAttackDamageStat(WeaponTypes.Sword, DataHelper.Number.FULL, Elements.Physical))
-
             .attackStyle(AttackPlayStyle.MELEE)
             .addWarriorLevelRanges()
             .build();

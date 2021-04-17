@@ -3,6 +3,7 @@ package com.robertx22.age_of_exile.mixins.bow;
 import com.robertx22.age_of_exile.vanilla_mc.items.gearitems.weapons.ModBowItem;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Hand;
@@ -25,8 +26,13 @@ public abstract class ProjectileUtilMixin {
     private static void getHandPossiblyHolding(LivingEntity entity, Item item, CallbackInfoReturnable<Hand> cir) {
         for (Hand hand : HANDS) {
             if (item == Items.BOW) { // Make sure we only check for bows when searching for bows and allow for other items like crossbows in future
-                if (entity.getStackInHand(hand)
-                    .getItem() instanceof ModBowItem) {
+                if (entity.getStackInHand(hand).getItem() instanceof ModBowItem) {
+                    cir.setReturnValue(hand);
+                    return;
+                }
+            }
+            else if (item == Items.CROSSBOW){
+                if (entity.getStackInHand(hand).getItem() instanceof CrossbowItem) {
                     cir.setReturnValue(hand);
                     return;
                 }

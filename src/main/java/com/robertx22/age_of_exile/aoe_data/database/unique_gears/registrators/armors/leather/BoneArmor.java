@@ -50,6 +50,7 @@ public class BoneArmor implements ISlashRegistryInit {
                     new StatModifier(5, 10, ArmorPenetration.getInstance(), ModType.FLAT),
                     new StatModifier(2, 5, CriticalHit.getInstance(), ModType.FLAT),
                     new StatModifier(5, 8, new SpecificWeaponDamage(WeaponTypes.Bow), ModType.FLAT),
+                    new StatModifier(5, 8, new SpecificWeaponDamage(WeaponTypes.CrossBow), ModType.FLAT),
                     new StatModifier(2, 5, Dexterity.INSTANCE, ModType.FLAT),
                     new StatModifier(2, 5, Agility.INSTANCE, ModType.FLAT)
 
