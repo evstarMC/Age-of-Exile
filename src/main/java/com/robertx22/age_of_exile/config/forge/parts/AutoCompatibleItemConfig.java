@@ -35,8 +35,8 @@ public class AutoCompatibleItemConfig {
         }
     }
 
-    public int MAX_SINGLE_STAT_VALUE = 50;
-    public int MAX_TOTAL_STATS = 200;
+    public int MAX_SINGLE_STAT_VALUE = 25;
+    public int MAX_TOTAL_STATS = 50;
 
     @ConfigEntry.Gui.CollapsibleObject
     public AutoConfigItemType WOOD = new AutoConfigItemType(0, 1, 1, 3).noSalvage();

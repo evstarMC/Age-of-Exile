@@ -8,6 +8,7 @@ import com.robertx22.age_of_exile.database.data.unique_items.UniqueGear;
 import com.robertx22.age_of_exile.database.registrators.LevelRanges;
 import com.robertx22.age_of_exile.database.registry.Database;
 import com.robertx22.age_of_exile.mmorpg.Ref;
+import net.minecraft.item.BowItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.registry.Registry;
@@ -18,11 +19,11 @@ import java.util.List;
 public class CompatibleItems {
 
     public enum VanillaTier {
-        WOOD(false, GearRarityGroups.UP_TO_MAGICAL, LevelRanges.STARTER),
-        LEATHER(false, GearRarityGroups.UP_TO_RARE, LevelRanges.STARTER),
-        IRON(false, GearRarityGroups.UP_TO_RARE, LevelRanges.LOW),
-        DIAMOND(true, GearRarityGroups.UP_TO_EPIC, LevelRanges.MIDDLE),
-        NETHERITE(true, GearRarityGroups.UP_TO_EPIC, LevelRanges.MIDDLE);
+        WOOD(true, GearRarityGroups.UP_TO_MAGICAL, LevelRanges.STARTER),
+        LEATHER(true, GearRarityGroups.UP_TO_RARE, LevelRanges.LOW),
+        IRON(true, GearRarityGroups.UP_TO_RARE, LevelRanges.MIDDLE),
+        DIAMOND(true, GearRarityGroups.UP_TO_EPIC, LevelRanges.MID_TO_END),
+        NETHERITE(true, GearRarityGroups.UP_TO_EPIC, LevelRanges.HIGH);
 
         public boolean canSalvage;
         public String rarities;
@@ -106,11 +107,12 @@ public class CompatibleItems {
 
             items.addAll(get(Items.WOODEN_AXE, VanillaTier.WOOD));
             items.addAll(get(Items.WOODEN_SWORD, VanillaTier.WOOD));
-            items.addAll(get(Items.BOW, VanillaTier.WOOD));
+//            items.addAll(get(Items.BOW, VanillaTier.WOOD));
+//            items.addAll(get(Items.CROSSBOW, VanillaTier.WOOD));
+
             items.addAll(get(Items.SHIELD, VanillaTier.WOOD));
 
-            for (BaseGearType slot : Database.GearTypes()
-                .getSerializable()) {
+            for (BaseGearType slot : Database.GearTypes().getSerializable()) {
                 Item item = slot.getItem();
 
                 if (!Registry.ITEM.getId(item)
@@ -127,19 +129,15 @@ public class CompatibleItems {
                     c.can_be_salvaged = true;
                     c.item_type = slot.GUID();
 
-                    String id = Registry.ITEM.getId(item)
-                        .toString();
-
+                    String id = Registry.ITEM.getId(item).toString();
                     c.rarities = GearRarityGroups.NON_UNIQUE_ID;
-
                     c.guid = id;
                     c.item_id = id;
 
                     items.add(c);
                 }
             }
-            for (UniqueGear uniq : Database.UniqueGears()
-                .getSerializable()) {
+            for (UniqueGear uniq : Database.UniqueGears().getSerializable()) {
                 Item item = uniq.getUniqueItem();
 
                 if (!Registry.ITEM.getId(item)
@@ -154,16 +152,14 @@ public class CompatibleItems {
 
                     CompatibleItem c = new CompatibleItem();
                     c.can_be_salvaged = true;
-                    c.item_type = uniq.getBaseGearType()
-                        .GUID();
+                    c.item_type = uniq.getBaseGearType().GUID();
 
                     c.rarities = GearRarityGroups.NON_UNIQUE_ID;
 
                     c.chance_to_become_unique = 100;
                     c.unique_id = uniq.GUID();
 
-                    String id = Registry.ITEM.getId(item)
-                        .toString();
+                    String id = Registry.ITEM.getId(item).toString();
 
                     c.guid = id;
                     c.item_id = id;
