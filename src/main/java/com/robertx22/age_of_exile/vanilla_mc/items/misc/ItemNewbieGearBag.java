@@ -8,6 +8,7 @@ import com.robertx22.age_of_exile.database.base.CreativeTabs;
 import com.robertx22.age_of_exile.database.data.gear_types.bases.BaseGearType;
 import com.robertx22.age_of_exile.database.data.perks.Perk;
 import com.robertx22.age_of_exile.database.data.skill_gem.SkillGem;
+import com.robertx22.age_of_exile.database.data.skill_gem.SkillGemData;
 import com.robertx22.age_of_exile.database.registry.Database;
 import com.robertx22.age_of_exile.loot.blueprints.GearBlueprint;
 import com.robertx22.age_of_exile.loot.blueprints.SkillGemBlueprint;
@@ -52,7 +53,7 @@ public class ItemNewbieGearBag extends Item {
 
         MAP.put(StartPerks.MAGE, new NewbieContent(Arrays.asList("wand0"), Arrays.asList(IntSpells.FIREBALL_ID)));
         MAP.put(StartPerks.BATTLE_MAGE, new NewbieContent(Arrays.asList("wand0"), Arrays.asList(IntSpells.POISONBALL_ID)));
-        MAP.put(StartPerks.HUNTER, new NewbieContent(Arrays.asList("bow0"), Arrays.asList(DexSpells.MULTI_SHOT_ID)).addStack(new ItemStack(Items.ARROW, 64)));
+        MAP.put(StartPerks.HUNTER, new NewbieContent(Arrays.asList("bow0"), Arrays.asList(DexSpells.MULTI_SHOT_ID, DexSpells.MAKE_ARROWS)).addStack(new ItemStack(Items.ARROW, 64)));
         MAP.put(StartPerks.WARRIOR, new NewbieContent(Arrays.asList("sword0"), Arrays.asList(StrSpells.FLAME_STRIKE_ID)));
         MAP.put(StartPerks.DUELIST, new NewbieContent(Arrays.asList("sword0"), Arrays.asList(StrSpells.FLAME_STRIKE_ID)));
 
@@ -91,7 +92,7 @@ public class ItemNewbieGearBag extends Item {
 
             gears.forEach(x -> {
                 BaseGearType gear = Database.GearTypes()
-                        .get(x);
+                    .get(x);
                 GearItemData data = getBlueprint(gear).createData();
                 data.lvl = 1;
                 data.can_sal = false;
@@ -105,11 +106,19 @@ public class ItemNewbieGearBag extends Item {
 
             skillgems.forEach(x -> {
                 SkillGem gem = Database.SkillGems()
-                        .get(x);
+                    .get(x);
                 SkillGemBlueprint blueprint = new SkillGemBlueprint(1);
+
                 blueprint.type.set(gem);
                 blueprint.level.set(1);
-                PlayerUtils.giveItem(blueprint.createStack(), player);
+
+                ItemStack stack = blueprint.createStack();
+
+                SkillGemData data = SkillGemData.fromStack(stack);
+                data.sal = false;
+                data.saveToStack(stack);
+
+                PlayerUtils.giveItem(stack, player);
             });
 
             stacks.forEach(x -> PlayerUtils.giveItem(x, player));
@@ -123,11 +132,11 @@ public class ItemNewbieGearBag extends Item {
             try {
 
                 List<Perk> starts = Load.perks(playerIn)
-                        .getAllAllocatedPerks()
-                        .values()
-                        .stream()
-                        .filter(x -> x.is_entry)
-                        .collect(Collectors.toList());
+                    .getAllAllocatedPerks()
+                    .values()
+                    .stream()
+                    .filter(x -> x.is_entry)
+                    .collect(Collectors.toList());
 
                 if (!starts.isEmpty()) {
 
@@ -140,7 +149,7 @@ public class ItemNewbieGearBag extends Item {
                     PlayerUtils.giveItem(book, playerIn);
 
                     playerIn.getStackInHand(handIn)
-                            .decrement(1);
+                        .decrement(1);
 
                 } else {
                     playerIn.sendMessage(new LiteralText("Choose your path to open this. (Press [H] and then open Talent Tree scren"), false);
@@ -159,7 +168,7 @@ public class ItemNewbieGearBag extends Item {
         GearBlueprint print = new GearBlueprint(1);
         print.gearItemSlot.set(type);
         print.rarity.set(Database.GearRarities()
-                .get(IRarity.COMMON_ID));
+            .get(IRarity.COMMON_ID));
         return print;
     }
 

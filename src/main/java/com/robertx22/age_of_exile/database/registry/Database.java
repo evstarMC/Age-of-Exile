@@ -35,12 +35,13 @@ import com.robertx22.age_of_exile.database.data.spell_schools.SpellSchool;
 import com.robertx22.age_of_exile.database.data.spells.components.Spell;
 import com.robertx22.age_of_exile.database.data.stats.Stat;
 import com.robertx22.age_of_exile.database.data.tiers.base.Tier;
-import com.robertx22.age_of_exile.database.data.tiers.impl.TierOne;
 import com.robertx22.age_of_exile.database.data.unique_items.UniqueGear;
+import com.robertx22.age_of_exile.database.data.value_calc.ValueCalculation;
 import com.robertx22.age_of_exile.database.registrators.CurrencyItems;
 import com.robertx22.age_of_exile.database.registrators.Stats;
 import com.robertx22.age_of_exile.database.registry.empty_entries.EmptyAffix;
 import com.robertx22.age_of_exile.database.registry.empty_entries.EmptyStat;
+import com.robertx22.age_of_exile.dimension.database.dungeon_mob_lists.DungeonMobList;
 import com.robertx22.age_of_exile.uncommon.utilityclasses.MapManager;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -221,6 +222,10 @@ public class Database {
         return getRegistry(SlashRegistryType.SCROLL_BUFFS);
     }
 
+    public static SlashRegistryContainer<DungeonMobList> DungeonMobLists() {
+        return getRegistry(SlashRegistryType.DUNGEON_MOB_LIST);
+    }
+
     public static SlashRegistryContainer<Spell> Spells() {
         return getRegistry(SlashRegistryType.SPELL);
     }
@@ -231,6 +236,10 @@ public class Database {
 
     public static SlashRegistryContainer<RuneWord> Runewords() {
         return getRegistry(SlashRegistryType.RUNEWORD);
+    }
+
+    public static SlashRegistryContainer<ValueCalculation> ValueCalculations() {
+        return getRegistry(SlashRegistryType.VALUE_CALC);
     }
 
     public static SlashRegistryContainer<EntityConfig> EntityConfigs() {
@@ -344,7 +353,7 @@ public class Database {
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.GEAR_RARITY_GROUP, null).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.GEAR_TYPE, null).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.EXILE_EFFECT, null).setIsDatapack());
-        addRegistry(new SlashRegistryContainer<>(SlashRegistryType.TIER, new TierOne()).setIsDatapack());
+        addRegistry(new SlashRegistryContainer<>(SlashRegistryType.TIER, new Tier(0)).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.AFFIX, EmptyAffix.getInstance()).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.MOB_AFFIX, new MobAffix("empty", "empty", Formatting.AQUA)).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.UNIQUE_GEAR, null).setIsDatapack());
@@ -366,6 +375,8 @@ public class Database {
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.RACES, new PlayerRace()).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.CRAFTING_REQ, new CraftingReq()).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.SCROLL_BUFFS, new ScrollBuff()).setIsDatapack());
+        addRegistry(new SlashRegistryContainer<>(SlashRegistryType.VALUE_CALC, new ValueCalculation()).setIsDatapack());
+        addRegistry(new SlashRegistryContainer<>(SlashRegistryType.DUNGEON_MOB_LIST, new DungeonMobList()).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.GEAR_SET, new GearSet()).setIsDatapack());
         addRegistry(new SlashRegistryContainer<>(SlashRegistryType.COMPATIBLE_ITEM,
             CompatibleItem.EMPTY).dontErrorIfEmpty()

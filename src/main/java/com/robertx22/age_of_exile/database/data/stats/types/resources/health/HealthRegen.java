@@ -2,6 +2,7 @@ package com.robertx22.age_of_exile.database.data.stats.types.resources.health;
 
 import com.robertx22.age_of_exile.database.data.stats.StatScaling;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.BaseRegenClass;
+import com.robertx22.age_of_exile.saveclasses.unit.ResourceType;
 import com.robertx22.age_of_exile.uncommon.enumclasses.Elements;
 
 public class HealthRegen extends BaseRegenClass {
@@ -13,7 +14,7 @@ public class HealthRegen extends BaseRegenClass {
     }
 
     private HealthRegen() {
-        this.min_val = 0.05F;
+        this.min_val = 0;
         this.scaling = StatScaling.NORMAL;
         this.statGroup = StatGroup.MAIN;
     }
@@ -31,6 +32,11 @@ public class HealthRegen extends BaseRegenClass {
     @Override
     public boolean IsPercent() {
         return false;
+    }
+
+    @Override
+    public ResourceType getResourceType() {
+        return ResourceType.HEALTH;
     }
 
     @Override

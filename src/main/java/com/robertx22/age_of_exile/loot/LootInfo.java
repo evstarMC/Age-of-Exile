@@ -6,6 +6,7 @@ import com.robertx22.age_of_exile.database.data.favor.FavorRank;
 import com.robertx22.age_of_exile.database.data.stats.types.loot.TreasureQuantity;
 import com.robertx22.age_of_exile.database.data.stats.types.misc.ExtraMobDropsStat;
 import com.robertx22.age_of_exile.database.registry.Database;
+import com.robertx22.age_of_exile.dimension.dungeon_data.DungeonData;
 import com.robertx22.age_of_exile.loot.generators.BaseLootGen;
 import com.robertx22.age_of_exile.uncommon.datasaving.Load;
 import com.robertx22.age_of_exile.uncommon.utilityclasses.LevelUtils;
@@ -48,6 +49,7 @@ public class LootInfo {
     public FavorRank favorRank;
     public PlayerFavor favor;
     public BlockPos pos;
+    public DungeonData dungeon;
 
     public int getMinItems() {
         return minItems;
@@ -84,6 +86,11 @@ public class LootInfo {
                     info.extraFavorItems = info.favorRank.extra_items_per_boss;
                 }
             }
+
+            if (info.isMapWorld) {
+                info.dungeon = Load.dungeonData(mob.world).data.get(info.pos).data;
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -107,12 +114,15 @@ public class LootInfo {
         info.pos = pos;
         info.level = LevelUtils.determineLevel(player.world, pos, player);
         info.multi = 1.5F;
+        info.maxItems = 7;
         info.setupAllFields();
 
         if (info.favorRank != null) {
             info.extraFavorItems = info.favorRank.extra_items_per_chest;
         }
-
+        if (info.isMapWorld) {
+            info.dungeon = Load.dungeonData(info.world).data.get(info.pos).data;
+        }
         return info;
     }
 
@@ -172,10 +182,10 @@ public class LootInfo {
 
     private LootInfo setTier() {
 
-        if (this.mobData != null) {
-            this.tier = mobData.getTier();
-        } else {
-            this.tier = 0;
+        if (world != null && pos != null) {
+            if (WorldUtils.isDungeonWorld(world)) {
+                this.tier = Load.dungeonData(world).data.get(pos).data.tier;
+            }
         }
         return this;
 
@@ -199,7 +209,7 @@ public class LootInfo {
 
     private void setWorld() {
         if (world != null) {
-            this.isMapWorld = WorldUtils.isMapWorld(world);
+            this.isMapWorld = WorldUtils.isDungeonWorld(world);
         }
     }
 
@@ -239,13 +249,19 @@ public class LootInfo {
             modifier += Database.getDimensionConfig(world).all_drop_multi - 1F;
         }
 
+        if (isMapWorld) {
+            if (dungeon != null) {
+                if (dungeon.is_team) {
+                    modifier *= 3;
+                }
+            }
+        }
+
         float chance = gen.baseDropChance() * modifier;
 
         chance = ExileEvents.SETUP_LOOT_CHANCE.callEvents(new ExileEvents.OnSetupLootChance(mobKilled, player, chance)).lootChance;
 
         amount = LootUtils.WhileRoll(chance);
-
-        //amount = MathHelper.clamp(amount, minItems, maxItems);
 
     }
 

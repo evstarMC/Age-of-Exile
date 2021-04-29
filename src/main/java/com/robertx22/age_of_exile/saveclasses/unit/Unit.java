@@ -9,6 +9,7 @@ import com.robertx22.age_of_exile.database.data.rarities.MobRarity;
 import com.robertx22.age_of_exile.database.data.set.GearSet;
 import com.robertx22.age_of_exile.database.data.skill_gem.SkillGemData;
 import com.robertx22.age_of_exile.database.data.stats.Stat;
+import com.robertx22.age_of_exile.database.data.stats.datapacks.stats.AttributeStat;
 import com.robertx22.age_of_exile.database.data.stats.types.core_stats.base.ICoreStat;
 import com.robertx22.age_of_exile.database.data.stats.types.core_stats.base.ITransferToOtherStats;
 import com.robertx22.age_of_exile.database.data.stats.types.resources.blood.Blood;
@@ -37,9 +38,6 @@ import info.loenwind.autosave.annotations.Storable;
 import info.loenwind.autosave.annotations.Store;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.attribute.EntityAttributeInstance;
-import net.minecraft.entity.attribute.EntityAttributeModifier;
-import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
@@ -308,7 +306,7 @@ public class Unit {
                 statContexts.addAll(MobStatUtils.getMobBaseStats(data, entity));
                 statContexts.addAll(MobStatUtils.getAffixStats(entity));
                 statContexts.addAll(MobStatUtils.getWorldMultiplierStats(entity));
-                MobStatUtils.increaseMobStatsPerTier(entity, data, this);
+                MobStatUtils.addMapStats(entity, data, this);
                 statContexts.addAll(MobStatUtils.getMobConfigStats(entity, data));
                 ExtraMobRarityAttributes.add(entity, data);
             }
@@ -343,6 +341,17 @@ public class Unit {
                     InCalcStatData statdata = x.getValue();
                     Stat stat = x.getValue()
                         .GetStat();
+                    if (stat instanceof IAffectsStats) {
+                        IAffectsStats add = (IAffectsStats) stat;
+                        add.affectStats(data, statdata);
+                    }
+                });
+
+            new HashMap<>(getStats().statsInCalc).entrySet()
+                .forEach(x -> {
+                    InCalcStatData statdata = x.getValue();
+                    Stat stat = x.getValue()
+                        .GetStat();
                     if (stat instanceof ITransferToOtherStats) {
                         ITransferToOtherStats add = (ITransferToOtherStats) stat;
                         add.transferStats(data, statdata);
@@ -357,17 +366,6 @@ public class Unit {
                     if (stat instanceof ICoreStat) {
                         ICoreStat add = (ICoreStat) stat;
                         add.addToOtherStats(data, statdata);
-                    }
-                });
-
-            new HashMap<>(getStats().statsInCalc).entrySet()
-                .forEach(x -> {
-                    InCalcStatData statdata = x.getValue();
-                    Stat stat = x.getValue()
-                        .GetStat();
-                    if (stat instanceof IAffectsStats) {
-                        IAffectsStats add = (IAffectsStats) stat;
-                        add.affectStats(data, statdata);
                     }
                 });
 
@@ -431,7 +429,13 @@ public class Unit {
 
             DirtyCheck aftercalc = getDirtyCheck();
 
-            addToVanillaHealth(entity);
+            this.getStats().stats.values()
+                .forEach(x -> {
+                    if (x.GetStat() instanceof AttributeStat) {
+                        AttributeStat stat = (AttributeStat) x.GetStat();
+                        stat.addToEntity(entity, x);
+                    }
+                });
 
             if (old.isDirty(aftercalc)) {
                 if (!Unit.shouldSendUpdatePackets((LivingEntity) entity)) {
@@ -480,28 +484,6 @@ public class Unit {
 
         return ctxs;
 
-    }
-
-    public static UUID hpID = UUID.fromString("e926df30-c376-11ea-87d0-0242ac130003");
-
-    private void addToVanillaHealth(LivingEntity en) {
-
-        float hp = getCalculatedStat(Health.getInstance()).getAverageValue();
-
-        EntityAttributeModifier mod = new EntityAttributeModifier(
-            hpID,
-            EntityAttributes.GENERIC_MAX_HEALTH.getTranslationKey(),
-            hp,
-            EntityAttributeModifier.Operation.ADDITION
-        );
-
-        EntityAttributeInstance atri = en.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
-
-        if (atri.hasModifier(mod)) {
-            atri.removeModifier(mod); // KEEP THIS OR UPDATE WONT MAKE HP CORRECT!!!
-        }
-
-        // DELETE AFTER A FEW UPDATES
     }
 
     private static HashMap<EntityType, Boolean> IGNORED_ENTITIES = null;

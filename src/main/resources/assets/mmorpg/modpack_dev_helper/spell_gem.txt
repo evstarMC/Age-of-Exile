@@ -51,10 +51,12 @@ flame_strike
 meteor
 frost_nova
 bleed_chance
+make_arrows
 fire_bombs
 spell_crit_dmg
 awaken_mana
 mana_reg_aura
 fire_nova
 poisoned_weapons
+taunt
 dodge_aura
