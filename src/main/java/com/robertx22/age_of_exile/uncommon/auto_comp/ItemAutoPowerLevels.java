@@ -12,14 +12,13 @@ import com.robertx22.age_of_exile.uncommon.testing.Watch;
 import me.sargunvohra.mcmods.autoconfig1u.shadowed.blue.endless.jankson.annotation.Nullable;
 import net.minecraft.entity.attribute.EntityAttribute;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.item.*;
+import net.minecraft.util.Rarity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.registry.Registry;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ItemAutoPowerLevels {
@@ -32,21 +31,82 @@ public class ItemAutoPowerLevels {
 
         try {
             this.item = item;
-
+            ItemStack itemAsStack = new ItemStack(item);
             Multimap<EntityAttribute, EntityAttributeModifier> stats = item.getAttributeModifiers(slot.getVanillaSlotType());
-
             this.statAmount = stats.size();
 
+            double mainAttribute = 0, mainAttributeMultiplier = 1;
+            if (item instanceof SwordItem){
+                SwordItem sword = (SwordItem) item;
+                // Main attribute: DAMAGE
+                mainAttribute = sword.getAttackDamage();
+                // Multiplier: ATTACK SPEED
+                Optional<EntityAttributeModifier> attribute = stats.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst();
+                if (attribute.isPresent()) mainAttributeMultiplier = -(float)attribute.get().getValue();
+            }
+            // axes
+            else if (item instanceof AxeItem){
+                AxeItem axe = ((AxeItem) item);
+                // Main attribute: DAMAGE
+                mainAttribute = axe.getAttackDamage();
+                // Multiplier: ATTACK SPEED
+                Optional<EntityAttributeModifier> attribute = stats.get(EntityAttributes.GENERIC_ATTACK_SPEED).stream().findFirst();
+                if (attribute.isPresent()) mainAttributeMultiplier = -(float)attribute.get().getValue();
+            }
+            else if (item instanceof BowItem){
+                BowItem bow = (BowItem) item;
+                // Main attribute: RANGE (default 15 = main attribute of 6)
+                mainAttribute = bow.getRange()/2.5;
+                // Multiplier: DRAW SPEED
+                mainAttributeMultiplier = ((72000 - bow.getMaxUseTime(itemAsStack))/10.0); // DRAW SPEED
+            }
+            else if (item instanceof CrossbowItem){
+                CrossbowItem crossbow = (CrossbowItem) item;
+                // Main attribute: RANGE (crossbows 8)
+                mainAttribute = crossbow.getRange();
+                // Multiplier: DRAW SPEED
+                mainAttributeMultiplier = crossbow.getMaxUseTime(itemAsStack);
+            }
+            else {
+                // some items only differ by durability, so make the more durable ones have higher value
+                mainAttribute = (int)(item.getMaxDamage() / 250F);
+            }
+            System.out.println("---- " + item.toString());
+
+            // build mainFactor
+            if (mainAttributeMultiplier < 1) mainAttributeMultiplier = 1;
+            int baseFactor = (int)(mainAttribute*mainAttributeMultiplier);
+            System.out.println("main: " + mainAttribute +  " mux: " + mainAttributeMultiplier);
+
+            // add rarity factor
+            int rarityFactor = 0;
+            Rarity rarity = item.getRarity(itemAsStack);
+            if (rarity == Rarity.EPIC) rarityFactor = 25;
+            else if (rarity == Rarity.RARE) rarityFactor = 10;
+            else if (rarity == Rarity.UNCOMMON) rarityFactor = 5;
+
+            // add durability factor
+            int durabilityFactor = 2;
+            int durability = item.getMaxDamage();
+            if (durability > 2000) durabilityFactor = 20; // NETHERITE
+            else if (durability > 1600) durabilityFactor = 10; // DIAMOND
+            else if (durability > 300) durabilityFactor = 6; // IRON
+            else if (durability > 150) durabilityFactor = 4; // STONE
+            else if (durability > 60) durabilityFactor = 2; // WOOD
+            else durabilityFactor = 5; // GOLD
+            System.out.println("base: " + baseFactor + " dura: " + durabilityFactor + " rarity: " + rarityFactor);
+
+            // get max caps
             int MAX_SINGLE_STAT_VALUE = ModConfig.get().autoCompatibleItems.MAX_SINGLE_STAT_VALUE;
             int MAX_TOTAL_STATS = ModConfig.get().autoCompatibleItems.MAX_TOTAL_STATS;
 
-            this.totalStatNumbers = stats.values()
-                .stream()
-                .mapToInt(x -> (int) MathHelper.clamp(x.getValue(), -MAX_SINGLE_STAT_VALUE, MAX_SINGLE_STAT_VALUE))
-                .sum();
-
-            totalStatNumbers = MathHelper.clamp(totalStatNumbers, -MAX_TOTAL_STATS, MAX_TOTAL_STATS);
-        } catch (Exception e) {
+            // add all factors
+            int sum = 0;
+            for (int factor : new int[]{baseFactor, rarityFactor, durabilityFactor}) sum += MathHelper.clamp(factor, -MAX_SINGLE_STAT_VALUE, MAX_SINGLE_STAT_VALUE);
+            totalStatNumbers = MathHelper.clamp(sum, 0, MAX_TOTAL_STATS);
+            System.out.println("totalStatNumbers: " + totalStatNumbers);
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -95,13 +155,9 @@ public class ItemAutoPowerLevels {
     @Nullable
     public static AutoConfigItemType getHandCustomizedType(Item item) {
 
-        if (!ModConfig.get().autoCompatibleItems.ENABLE_MANUAL_TWEAKS) {
-            return null;
-        }
+        if (!ModConfig.get().autoCompatibleItems.ENABLE_MANUAL_TWEAKS) return null;
 
-        if (item == Items.BOW || item == Items.CROSSBOW) {
-            return ModConfig.get().autoCompatibleItems.TIER_0;
-        }
+//        if (item == Items.BOW || item == Items.CROSSBOW) return ModConfig.get().autoCompatibleItems.TIER_0;
 
         if (item instanceof ToolItem) {
             ToolItem tool = (ToolItem) item;
@@ -128,42 +184,22 @@ public class ItemAutoPowerLevels {
     }
 
     public static AutoConfigItemType getPowerClassification(Float val) {
-
         AutoCompatibleItemConfig config = ModConfig.get().autoCompatibleItems;
-
-        AutoConfigItemType type = null;
-
-        if (config.TIER_5.isInRange(val)) {
-            type = config.TIER_5;
-        } else if (config.TIER_4.isInRange(val)) {
-            type = config.TIER_4;
-        } else if (config.TIER_3.isInRange(val)) {
-            type = config.TIER_3;
-        } else if (config.TIER_2.isInRange(val)) {
-            type = config.TIER_2;
-        } else if (config.TIER_1.isInRange(val)) {
-            type = config.TIER_1;
-        } else {
-            type = config.TIER_0;
-        }
-
-        return type;
+        if (config.TIER_5.isInRange(val)) return config.TIER_5;
+        else if (config.TIER_4.isInRange(val)) return config.TIER_4;
+        else if (config.TIER_3.isInRange(val)) return config.TIER_3;
+        else if (config.TIER_2.isInRange(val)) return config.TIER_2;
+        else if (config.TIER_1.isInRange(val)) return config.TIER_1;
+        else return config.TIER_0;
     }
 
     public static AutoConfigItemType getPowerClassification(Item item) {
-
-        if (CACHED.containsKey(item)) {
-            return CACHED.get(item);
-        }
+        if (CACHED.containsKey(item)) return CACHED.get(item);
 
         AutoConfigItemType handmade = getHandCustomizedType(item);
-
-        if (handmade != null) {
-            return handmade;
-        }
+        if (handmade != null) return handmade;
 
         AutoConfigItemType type = getPowerClassification(getFloatValueOf(item));
-
         CACHED.put(item, type);
 
         return type;
@@ -186,21 +222,15 @@ public class ItemAutoPowerLevels {
     }
 
     public static void setupHashMaps() {
-
-        Set<BaseGearType> types = new HashSet<>(Database.GearTypes()
-            .getList());
+        Set<BaseGearType> types = new HashSet<>(Database.GearTypes().getList());
 
         Watch watch = new Watch();
 
         Registry.ITEM
             .stream()
-            .filter(x -> {
-                return !Ref.MODID.equals(Registry.ITEM.getId(x)
-                    .getNamespace()) && !(x instanceof BlockItem);
-            })
+            .filter(x -> !Ref.MODID.equals(Registry.ITEM.getId(x).getNamespace()) && !(x instanceof BlockItem))
             .forEach(item -> {
                 try {
-
                     for (BaseGearType slot : types) {
                         if (BaseGearType.isGearOfThisType(slot, item)) {
 
@@ -208,12 +238,9 @@ public class ItemAutoPowerLevels {
 
                             ItemAutoPowerLevels strongest = STRONGEST.getOrDefault(slot.GUID(), current);
 
-                            if (current.isStrongerThan(strongest)) {
-                                strongest = current;
-                            }
+                            if (current.isStrongerThan(strongest)) strongest = current;
 
-                            STRONGEST.put(slot.getGearSlot()
-                                .GUID(), strongest);
+                            STRONGEST.put(slot.getGearSlot().GUID(), strongest);
 
                             break;
                         }

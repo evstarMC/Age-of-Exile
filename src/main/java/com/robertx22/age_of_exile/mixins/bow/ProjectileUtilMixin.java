@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ProjectileUtilMixin {
 
     private static final Hand[] HANDS = {
-        Hand.MAIN_HAND,
-        Hand.OFF_HAND
+            Hand.MAIN_HAND,
+            Hand.OFF_HAND
     }; // Cache the hands to not create the hands array each time the loop is run
 
     // Because the uses of this method are hardcoded, checking each hand for the Fabric interfaces of the items is needed.

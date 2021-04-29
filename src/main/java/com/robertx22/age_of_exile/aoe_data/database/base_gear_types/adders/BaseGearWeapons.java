@@ -21,6 +21,8 @@ import com.robertx22.age_of_exile.uncommon.enumclasses.ModType;
 
 import java.util.HashMap;
 
+import static com.robertx22.age_of_exile.aoe_data.database.DataHelper.getAttackDamageStat;
+
 public class BaseGearWeapons implements ISlashRegistryInit {
 
     public static HashMap<LevelRange, DataGenKey<BaseGearType>> SWORD;
