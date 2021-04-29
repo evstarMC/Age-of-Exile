@@ -2,7 +2,7 @@ package com.robertx22.age_of_exile.player_skills.recipe_types;
 
 import com.robertx22.age_of_exile.player_skills.recipe_types.base.StationShapeless;
 import me.shedaniel.rei.api.EntryStack;
-import me.shedaniel.rei.plugin.crafting.DefaultCraftingDisplay;
+import me.shedaniel.rei.api.RecipeDisplay;
 import net.minecraft.recipe.Recipe;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -11,15 +11,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class ReiShapelessDisplay implements DefaultCraftingDisplay {
-    private StationShapeless display;
-    private List<List<EntryStack>> input;
-    private List<EntryStack> output;
+public class ReiShapelessDisplay implements RecipeDisplay {
+    private final StationShapeless display;
+    private final List<List<EntryStack>> input;
+    private final List<EntryStack> output;
+    private final Identifier recipeCategory;
 
     public ReiShapelessDisplay(StationShapeless recipe) {
         this.display = recipe;
         this.input = EntryStack.ofIngredients(recipe.getPreviewInputs());
         this.output = Collections.singletonList(EntryStack.create(recipe.getOutput()));
+        this.recipeCategory = recipe.recipeCategory;
     }
 
     public Optional<Recipe<?>> getOptionalRecipe() {
@@ -27,10 +29,7 @@ public class ReiShapelessDisplay implements DefaultCraftingDisplay {
     }
 
     @NotNull
-    public Optional<Identifier> getRecipeLocation() {
-        return Optional.ofNullable(this.display)
-            .map(x -> x.getId());
-    }
+    public Optional<Identifier> getRecipeLocation() { return Optional.ofNullable(this.display).map(StationShapeless::getId); }
 
     @NotNull
     public List<List<EntryStack>> getInputEntries() {
@@ -46,6 +45,9 @@ public class ReiShapelessDisplay implements DefaultCraftingDisplay {
     public List<List<EntryStack>> getRequiredEntries() {
         return this.input;
     }
+
+    @Override
+    public @NotNull Identifier getRecipeCategory() { return this.recipeCategory; }
 
     public int getWidth() {
         return this.display.getPreviewInputs()

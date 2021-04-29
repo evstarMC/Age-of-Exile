@@ -22,12 +22,14 @@ public abstract class StationShapeless implements Recipe<Inventory> {
     public final String group;
     public final ItemStack output;
     public final DefaultedList<Ingredient> input;
+    public final Identifier recipeCategory;
 
-    public StationShapeless(Identifier id, String group, ItemStack output, DefaultedList<Ingredient> input) {
+    public StationShapeless(Identifier id, String group, ItemStack output, DefaultedList<Ingredient> input, Identifier recipeCategory) {
         this.id = id;
         this.group = group;
         this.output = output;
         this.input = input;
+        this.recipeCategory = recipeCategory;
     }
 
     public Identifier getId() {

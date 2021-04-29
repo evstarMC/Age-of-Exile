@@ -1,7 +1,10 @@
 package com.robertx22.age_of_exile.vanilla_mc.blocks;
 
+import com.robertx22.age_of_exile.vanilla_mc.blocks.bases.VanillaFuelSlot;
+import com.robertx22.age_of_exile.vanilla_mc.blocks.slots.OutputSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
@@ -107,6 +110,15 @@ public abstract class BaseTileContainer extends ScreenHandler {
         }
 
         return itemstack;
+    }
+
+    public void buildComponents(CraftingWidgetComponent[] components, Inventory inventory){
+        int count = 0;
+        for (CraftingWidgetComponent c : components){
+            if (c.type == CraftingWidgetComponentType.INPUT_SLOT) addSlot(new Slot(inventory, count++, c.x, c.y));
+            if (c.type == CraftingWidgetComponentType.FUEL_SLOT) addSlot(new VanillaFuelSlot(inventory, count++, c.x, c.y));
+            if (c.type == CraftingWidgetComponentType.OUTPUT_SLOT) addSlot(new OutputSlot(inventory, count++, c.x, c.y));
+        }
     }
 
     // detectAndSendChanges is called every tick and can be used to get listeners and update, BUT it would take a huge rewrite and it's not worth it.
