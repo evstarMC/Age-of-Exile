@@ -289,8 +289,8 @@ mmorpg:jewelry/ring/thunder_res_ring_end
 mmorpg:uniques/armor/crown_of_elements
 mmorpg:uniques/armor/void_helmet
 mmorpg:uniques/armor/void_pants
-mmorpg:armor/plate/helmet/plate_helmet3
 minecraft:leather_helmet.plate_helmet1
+mmorpg:armor/plate/helmet/plate_helmet3
 mmorpg:uniques/jewelry/solar_ring
 mmorpg:armor/plate/helmet/plate_helmet4
 minecraft:leather_helmet.plate_helmet0

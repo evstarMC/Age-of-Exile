@@ -38,6 +38,57 @@ public class DexSpells implements ISlashRegistryInit {
             .onTick(PartBuilder.particleOnTick(5D, ParticleTypes.CRIT, 5D, 0.1D))
             .build();
 
+        SpellBuilder.of("charged_arrow", SpellConfiguration.Builder.arrowSpell(20, 20 * 25), "Charged Arrow",
+                Arrays.asList(SkillGemTag.PROJECTILE, SkillGemTag.DAMAGE))
+                .weaponReq(CastingWeapon.RANGED)
+                .attackStyle(AttackPlayStyle.RANGED)
+                .onCast(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1D, 1D))
+                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.createArrow(1D)))
+                .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(1.5F, 1), Elements.Thunder))
+
+                .onHit(PartBuilder.addExileEffectToEnemiesInAoe(NegativeEffects.PETRIFY, 2D, 20 * 8D))
+                .onHit(PartBuilder.aoeParticles(ParticleTypes.FIREWORK, 5D, 0.4D))
+
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_HIT, 1D, 1D))
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_LIGHTNING_BOLT_IMPACT, 1D, 1D))
+                .onHit(PartBuilder.damage(ValueCalculationData.base(10), Elements.Thunder))
+
+                .build();
+
+        SpellBuilder.of("fire_arrow", SpellConfiguration.Builder.arrowSpell(10, 20 * 10), "Fire Arrow",
+                Arrays.asList(SkillGemTag.PROJECTILE, SkillGemTag.DAMAGE))
+                .weaponReq(CastingWeapon.RANGED)
+                .attackStyle(AttackPlayStyle.RANGED)
+                .onCast(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1D, 1D))
+                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.createArrow(1D)))
+                .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(0.5F, 1), Elements.Fire))
+
+                .onHit(PartBuilder.addExileEffectToEnemiesInAoe(NegativeEffects.BURN, 2D, 20 * 8D))
+                .onHit(PartBuilder.aoeParticles(ParticleTypes.FLAME, 100D, 2D))
+
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_HIT, 1D, 1D))
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_GENERIC_BURN, 1D, 1D))
+                .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(0.25F, 1), Elements.Fire))
+                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.FLAME, 4D, 0.1D))
+                .build();
+
+        SpellBuilder.of("frost_arrow", SpellConfiguration.Builder.arrowSpell(10, 20 * 10), "Frost Arrow",
+                Arrays.asList(SkillGemTag.PROJECTILE, SkillGemTag.DAMAGE))
+                .weaponReq(CastingWeapon.RANGED)
+                .attackStyle(AttackPlayStyle.RANGED)
+                .onCast(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_SHOOT, 1D, 1D))
+                .onCast(PartBuilder.justAction(SpellAction.SUMMON_PROJECTILE.createArrow(1D)))
+                .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(0.5F, 1), Elements.Nature))
+
+                .onHit(PartBuilder.addExileEffectToEnemiesInAoe(NegativeEffects.FROSTBURN, 2D, 20 * 8D))
+                .onHit(PartBuilder.aoeParticles(ParticleTypes.ITEM_SNOWBALL, 100D, 2D))
+
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_HIT, 1D, 1D))
+                .onHit(PartBuilder.playSound(SoundEvents.ENTITY_SNOWBALL_THROW, 1D, 1D))
+                .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(0.25F, 1), Elements.Elemental))
+                .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.ITEM_SNOWBALL, 4D, 0.1D))
+                .build();
+
         SpellBuilder.of("poison_arrow", SpellConfiguration.Builder.arrowSpell(10, 20 * 10), "Poison Arrow",
             Arrays.asList(SkillGemTag.PROJECTILE, SkillGemTag.DAMAGE))
             .weaponReq(CastingWeapon.RANGED)
@@ -52,7 +103,7 @@ public class DexSpells implements ISlashRegistryInit {
             .onHit(PartBuilder.playSound(SoundEvents.ENTITY_ARROW_HIT, 1D, 1D))
             .onHit(PartBuilder.playSound(SoundEvents.ENTITY_SPLASH_POTION_BREAK, 1D, 1D))
             .onHit(PartBuilder.damage(ValueCalculationData.scaleWithAttack(0.25F, 1), Elements.Nature))
-            .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.CRIT, 4D, 0.1D))
+            .onTick(PartBuilder.particleOnTick(1D, ParticleTypes.ITEM_SLIME, 4D, 0.1D))
             .build();
 
         SpellBuilder.of("explosive_arrow", SpellConfiguration.Builder.arrowSpell(10, 20 * 10), "Explosive Arrow",

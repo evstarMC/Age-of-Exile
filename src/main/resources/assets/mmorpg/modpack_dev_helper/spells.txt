@@ -3,6 +3,7 @@ This registry is modify-able through datapacks.
 healing_aura
 thorn_armor
 blazing_inferno
+charged_arrow
 whirlwind
 thunder_storm
 armor_aura
@@ -27,6 +28,7 @@ poison_ball
 teleport
 lightning_totem
 nature_balm
+fire_arrow
 volcano
 arrow_barrage
 fireball
@@ -43,6 +45,7 @@ flame_strike
 meteor
 whirlpool
 frost_nova
+frost_arrow
 fire_bombs
 awaken_mana
 mana_reg_aura
