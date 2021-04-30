@@ -21,8 +21,6 @@ public class LifeCycleEvents {
         });
 
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
-            ItemAutoPowerLevels.setupHashMaps();
-
             CommandRegister.Register(server);
 
             regenDefault = server

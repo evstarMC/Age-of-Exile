@@ -69,9 +69,6 @@ public class RegistryPackets {
 
         watch.print("Registering registry from gson packets on client");
 
-        if (sync == SyncTime.ON_LOGIN) {
-            ItemAutoPowerLevels.setupHashMaps();
-        }
 
         map.clear();
     }
