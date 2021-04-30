@@ -98,7 +98,7 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
 
     public GearSlot getGearSlot() {
         return Database.GearSlots()
-            .get(gear_slot);
+                .get(gear_slot);
     }
 
     @Override
@@ -156,13 +156,13 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
 
     public final float getAttacksPerSecondCalculated(EntityCap.UnitData data) {
         return getAttacksPerSecondCalculated(data.getUnit()
-            .getCalculatedStat(AttackSpeed.getInstance()));
+                .getCalculatedStat(AttackSpeed.getInstance()));
     }
 
     public final float getAttacksPerSecondCalculated(StatData stat) {
 
         float multi = stat
-            .getMultiplier();
+                .getMultiplier();
 
         float f = multi * attacksPerSecond;
 
@@ -176,25 +176,27 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
     public final boolean hasUniqueItemVersions() {
 
         List<UniqueGear> uniques = Database.UniqueGears()
-            .getFilterWrapped(x -> {
-                return x.getPossibleGearTypes()
-                    .stream()
-                    .anyMatch(e -> e.GUID()
-                        .equals(GUID()));
-            }).list;
+                .getFilterWrapped(x -> {
+                    return x.getPossibleGearTypes()
+                            .stream()
+                            .anyMatch(e -> e.GUID()
+                                    .equals(GUID()));
+                }).list;
 
         return !uniques.isEmpty();
 
     }
 
     public final boolean isWeaponOrTool() {
-        return this.family()
-            .equals(SlotFamily.Weapon) || family() == SlotFamily.Tool;
+        if (this.family() == null) {
+            System.out.println("NULL FAMILY: " + this.locname + ", " + this.tags);
+            return false;
+        }
+        return this.family().equals(SlotFamily.Weapon) || this.family().equals(SlotFamily.Tool);
     }
 
     public final boolean isMeleeWeapon() {
-        return this.getTags()
-            .contains(SlotTag.melee_weapon);
+        return this.getTags().contains(SlotTag.melee_weapon);
     }
 
     public boolean isShield() {
@@ -295,15 +297,15 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
         }
 
         String id = slot.getGearSlot()
-            .GUID();
+                .GUID();
 
         if (!CACHED_GEAR_SLOTS.containsKey(id)) {
             CACHED_GEAR_SLOTS.put(id, new HashMap<>());
         }
         if (CACHED_GEAR_SLOTS.get(id)
-            .containsKey(item)) {
+                .containsKey(item)) {
             return CACHED_GEAR_SLOTS.get(id)
-                .get(item);
+                    .get(item);
         }
 
         boolean bool = false;
@@ -312,29 +314,29 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
             if (item instanceof ArmorItem) {
                 if (slot.getVanillaSlotType() != null) {
                     if (slot.getVanillaSlotType()
-                        .equals(((ArmorItem) item).getSlotType())) {
+                            .equals(((ArmorItem) item).getSlotType())) {
                         bool = true;
                     }
                 }
             } else if (slot.getTags()
-                .contains(SlotTag.sword)) {
+                    .contains(SlotTag.sword)) {
                 bool = item instanceof SwordItem;
             } else if (slot.getTags()
-                .contains(SlotTag.bow)) {
+                    .contains(SlotTag.bow)) {
                 bool = item instanceof BowItem;
             } else if (slot.getTags()
-                .contains(SlotTag.axe)) {
+                    .contains(SlotTag.axe)) {
                 bool = item instanceof AxeItem;
             } else if (slot.getTags()
-                .contains(SlotTag.shield)) {
+                    .contains(SlotTag.shield)) {
                 bool = item instanceof ShieldItem;
             } else if (slot.getTags()
-                .contains(SlotTag.crossbow)) {
+                    .contains(SlotTag.crossbow)) {
                 bool = item instanceof CrossbowItem;
             }
 
             CACHED_GEAR_SLOTS.get(id)
-                .put(item, bool);
+                    .put(item, bool);
 
             return bool;
 
@@ -347,10 +349,10 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
     }
 
     public static List<SlotTag> SLOT_TYPE_TAGS = Arrays.asList(
-        SlotTag.sword, SlotTag.axe, SlotTag.wand,
-        SlotTag.boots, SlotTag.chest, SlotTag.pants, SlotTag.helmet,
-        SlotTag.bow, SlotTag.crossbow,
-        SlotTag.ring, SlotTag.necklace
+            SlotTag.sword, SlotTag.axe, SlotTag.wand,
+            SlotTag.boots, SlotTag.chest, SlotTag.pants, SlotTag.helmet,
+            SlotTag.bow, SlotTag.crossbow,
+            SlotTag.ring, SlotTag.necklace
     );
 
     public SlotTag getSlotType() {
@@ -358,11 +360,11 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
         List<SlotTag> list = new ArrayList<>();
 
         SLOT_TYPE_TAGS.stream()
-            .forEach(x -> {
-                if (getTags().contains(x)) {
-                    list.add(x);
-                }
-            });
+                .forEach(x -> {
+                    if (getTags().contains(x)) {
+                        list.add(x);
+                    }
+                });
 
         if (list.isEmpty()) {
             System.out.println("Item has no slot type tag?!!");
@@ -439,79 +441,79 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
 
         if (tags.contains(SlotTag.sword)) {
             return new String[]{
-                " M ",
-                " M ",
-                " S "
+                    " M ",
+                    " M ",
+                    " S "
             };
         }
         if (tags.contains(SlotTag.axe)) {
             return new String[]{
-                "MM ",
-                " S ",
-                " S "
+                    "MM ",
+                    " S ",
+                    " S "
             };
         }
         if (tags.contains(SlotTag.wand)) {
             return new String[]{
-                "  M",
-                " M ",
-                "S  "
+                    "  M",
+                    " M ",
+                    "S  "
             };
         }
         if (tags.contains(SlotTag.bow)) {
             return new String[]{
-                " MB",
-                "M B",
-                " MB"
+                    " MB",
+                    "M B",
+                    " MB"
             };
         }
         if (tags.contains(SlotTag.crossbow)) {
             return new String[]{
-                "MSM",
-                "S S",
-                " S "
+                    "MSM",
+                    "S S",
+                    " S "
             };
         }
 
         if (tags.contains(SlotTag.chest)) {
             return new String[]{
-                "M M",
-                "MMM",
-                "MMM"
+                    "M M",
+                    "MMM",
+                    "MMM"
             };
         }
         if (tags.contains(SlotTag.boots)) {
             return new String[]{
-                "M M",
-                "M M"
+                    "M M",
+                    "M M"
             };
         }
         if (tags.contains(SlotTag.pants)) {
             return new String[]{
-                "MMM",
-                "M M",
-                "M M"
+                    "MMM",
+                    "M M",
+                    "M M"
             };
         }
         if (tags.contains(SlotTag.helmet)) {
             return new String[]{
-                "MMM",
-                "M M"
+                    "MMM",
+                    "M M"
             };
         }
 
         if (tags.contains(SlotTag.necklace)) {
             return new String[]{
-                "MMM",
-                "M M",
-                " M "
+                    "MMM",
+                    "M M",
+                    " M "
             };
         }
         if (tags.contains(SlotTag.ring)) {
             return new String[]{
-                " M ",
-                "M M",
-                " M "
+                    " M ",
+                    "M M",
+                    " M "
             };
         }
 
@@ -526,12 +528,12 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
     @Override
     public Rarity getRarity() {
         return Database.GearRarities()
-            .get(getRarityRank());
+                .get(getRarityRank());
     }
 
     public GearRarityGroup getRarityGroup() {
         return Database.GearRarityGroups()
-            .get(rar_group);
+                .get(rar_group);
     }
 
     @Override
@@ -564,7 +566,7 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
         json.add("tag_list", getTags().toJson());
         json.add("stat_req", getStatRequirements().toJson());
         json.addProperty("item_id", Registry.ITEM.getId(getItem())
-            .toString());
+                .toString());
         json.addProperty("gear_slot", this.gear_slot);
         json.addProperty("rar_group", this.rar_group);
         json.addProperty("weapon_type", weaponType().toString());
@@ -583,32 +585,32 @@ public final class BaseGearType implements IAutoLocName, ISerializedRegistryEntr
         o.weight = this.getWeightFromJson(json);
         if (json.has("atk_speed")) {
             o.attacksPerSecond = json.get("atk_speed")
-                .getAsFloat();
+                    .getAsFloat();
         }
         o.level_range = LevelRange.SERIALIZER.fromJson(json.getAsJsonObject("level_range"));
         o.stat_reqs = StatRequirement.EMPTY.fromJson(json.getAsJsonObject("stat_req"));
         o.base_stats = JsonUtils.getStats(json, "base_stats");
         o.implicit_stats = JsonUtils.getStats(json, "implicit_stats");
         o.gear_slot = json.get("gear_slot")
-            .getAsString();
+                .getAsString();
         if (json.has("rar_group")) {
             o.rar_group = json.get("rar_group")
-                .getAsString();
+                    .getAsString();
         }
 
         try {
             o.style = AttackPlayStyle.valueOf(json.get("attack_style")
-                .getAsString());
+                    .getAsString());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         o.item_id = json.get("item_id")
-            .getAsString();
+                .getAsString();
 
         try {
             o.weapon_type = WeaponTypes.valueOf(json.get("weapon_type")
-                .getAsString());
+                    .getAsString());
         } catch (Exception e) {
             o.weapon_type = WeaponTypes.None;
         }
