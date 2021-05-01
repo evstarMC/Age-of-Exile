@@ -65,7 +65,7 @@ public class ItemAutoPowerLevels {
                     // Multiplier: DRAW SPEED (default 28)
                     mainAttributeMultiplier = 28.0f / crossbow.getMaxUseTime(itemAsStack);
                 }
-                if (item instanceof ShieldItem){
+                else if (item instanceof ShieldItem){
                     ShieldItem shield = (ShieldItem) item;
                     // Main attribute: DAMAGE
                     mainAttribute = shield.getMaxDamage() / 100F;
